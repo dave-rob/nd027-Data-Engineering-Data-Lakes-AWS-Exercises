@@ -10,6 +10,8 @@
 # However, the workspaces already have Spark installed and you do not
 # need to use the findspark module
 #
+
+
 ###
 
 import pyspark
@@ -30,10 +32,10 @@ log_of_songs = [
 ]
 
 # parallelize the log_of_songs to use with Spark
-
+distributed_song_log_rdd = sc.parallelize(log_of_songs)
 
 # show the original input data is preserved
-
+print(log_of_songs)
 
 # create a python function to convert strings to lowercase
 def convert_song_to_lowercase(song):
@@ -42,9 +44,10 @@ def convert_song_to_lowercase(song):
 print(convert_song_to_lowercase("Songtitle"))
 
 # use the map function to transform the list of songs with the python function that converts strings to lowercase
-
+distributed_song_log_rdd.map(convert_song_to_lowercase).foreach(print)
 
 # Show the original input data is still mixed case
-
+distributed_song_log_rdd.foreach(print)
 
 # Use lambda functions instead of named functions to do the same map operation
+distributed_song_log_rdd.map(lambda song: song.lower()).foreach(print)
