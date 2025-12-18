@@ -44,7 +44,8 @@ def convert_song_to_lowercase(song):
 print(convert_song_to_lowercase("Songtitle"))
 
 # use the map function to transform the list of songs with the python function that converts strings to lowercase
-distributed_song_log_rdd.map(convert_song_to_lowercase).foreach(print)
+rdd_collected = distributed_song_log_rdd.map(convert_song_to_lowercase).collect()
+print(rdd_collected)
 
 # Show the original input data is still mixed case
 distributed_song_log_rdd.foreach(print)
