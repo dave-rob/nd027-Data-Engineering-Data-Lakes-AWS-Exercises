@@ -64,6 +64,17 @@ not_visited_df = spark.sql(f'''
 # How many female users do we have in the data set?
 
 # TODO: write your code to answer question 3
+print("\n---------------------------------------------")
+print("Question 3")
+print("----------------------------------------------")
+
+female_user_query = '''
+                                SELECT COUNT(DISTINCT userId) AS Female_Count
+                                FROM user_log_table
+                                WHERE gender == 'F'
+                                  '''
+
+female_query_count = spark.sql(female_user_query).show()
 
 
 # # Question 4
