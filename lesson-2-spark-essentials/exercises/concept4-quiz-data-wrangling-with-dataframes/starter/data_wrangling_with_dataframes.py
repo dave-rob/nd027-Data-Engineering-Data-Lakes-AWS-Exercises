@@ -2,6 +2,9 @@
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, desc, udf
+from pyspark.sql.functions import sum as Fsum
+from pyspark.sql.window import Window
+from pyspark.sql.types import IntegerType
 
 # TODOS: 
 # 1) import any other libraries you might need
@@ -86,3 +89,25 @@ most_played_df.show()
 
 # TODO: write your code to answer question 5
 
+print("\n---------------------------------------------")
+print("Question 5")
+print("----------------------------------------------")
+
+windowval = Window.partitionBy("userId").orderBy(desc("ts")).rangeBetween(Window.unboundedPreceding, 0)
+
+is_home = udf(lambda h: int(h=="Home"), IntegerType())
+
+cusum = df.filter((df.page == 'NextSong') | (df.page == 'Home')) \
+    .select('userID', 'page', 'ts') \
+    .where(df["userId"] != "") \
+    .withColumn('homevisit', is_home(col('page'))) \
+    .withColumn('period', Fsum('homevisit') \
+    .over(windowval)) 
+
+cusum.show(300)
+
+cusum.filter((cusum.page == 'NextSong')) \
+    .groupBy('userID', 'period') \
+    .agg({'period':'count'}) \
+    .agg({'count(period)':'avg'}) \
+    .show()
