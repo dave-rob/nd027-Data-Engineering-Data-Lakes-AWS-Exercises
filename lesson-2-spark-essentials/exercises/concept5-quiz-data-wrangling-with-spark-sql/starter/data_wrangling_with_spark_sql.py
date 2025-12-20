@@ -82,6 +82,20 @@ female_query_count = spark.sql(female_user_query).show()
 # How many songs were played from the most played artist?
 
 # TODO: write your code to answer question 4
+print("\n---------------------------------------------")
+print("Question 4")
+print("----------------------------------------------")
+
+most_played_query = '''
+                                SELECT artist, COUNT(artist) as songs_played
+                                FROM user_log_table
+                                WHERE artist != "NULL"
+                                GROUP BY artist
+                                ORDER BY songs_played DESC
+                                LIMIT 1                           
+'''
+
+spark.sql(most_played_query).show()
 
 # # Question 5 (challenge)
 # 
