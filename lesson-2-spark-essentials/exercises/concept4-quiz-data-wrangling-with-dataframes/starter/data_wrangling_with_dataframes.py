@@ -14,11 +14,15 @@ spark = SparkSession.builder.appName("Wrangling Quiz").getOrCreate()
 path = "../../data/sparkify_log_small.json"
 df = spark.read.json(path)
 
+df.printSchema()
 # # Question 1
 # 
 # Which page did user id "" (empty string) NOT visit?
 
 # TODO: write your code to answer question 1
+print("---------------------------------------------")
+print("Question 1")
+print("---------------------------------------------")
 empty_user_df = df.select("page").where(df["userId"] == "").dropDuplicates()
 all_pages_df = df.select("page").dropDuplicates()
 print("The pages that the empty userId accessed:")
@@ -39,7 +43,12 @@ for row in set(all_pages_df.collect()) - set(empty_user_df.collect()):
 
 
 # TODO: use this space to explore the behavior of the user with an empty string
-
+print("\n---------------------------------------------")
+print("Question 2")
+print("---------------------------------------------")
+print("The empty user seems to be a user who isn't logged in or doesn't have an account. \nThis would be a user" \
+    " who is accessing the home page and accessing pages generally accessible from the home page before being given access to the " \
+    "other pages.")
 
 # # Question 3
 # 
