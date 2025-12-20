@@ -69,6 +69,15 @@ print(f"\nThere are {female_df.count()} female users.")
 
 # TODO: write your code to answer question 4
 
+print("\n---------------------------------------------")
+print("Question 4")
+print("----------------------------------------------")
+
+print("\nThe artist with the most amount of different songs played:")
+most_played_df = df.select("artist", "song").where(df["artist"] != "NULL").groupBy("Artist").agg({'Artist':'count'}).sort(desc('count(Artist)')).limit(1)
+most_played_df.show()
+
+
 # # Question 5 (challenge)
 # 
 # How many songs do users listen to on average between visiting our home page? Please round your answer to the closest integer.
