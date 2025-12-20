@@ -1,6 +1,7 @@
 # # Data Wrangling with DataFrames Coding Quiz
 
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, desc, udf
 
 # TODOS: 
 # 1) import any other libraries you might need
@@ -8,12 +9,27 @@ from pyspark.sql import SparkSession
 # 3) read in the data set located at the path "../../data/sparkify_log_small.json"
 # 4) write code to answer the quiz questions 
 
+spark = SparkSession.builder.appName("Wrangling Quiz").getOrCreate()
+
+path = "../../data/sparkify_log_small.json"
+df = spark.read.json(path)
 
 # # Question 1
 # 
 # Which page did user id "" (empty string) NOT visit?
 
 # TODO: write your code to answer question 1
+empty_user_df = df.select("page").where(df["userId"] == "").dropDuplicates()
+all_pages_df = df.select("page").dropDuplicates()
+print("The pages that the empty userId accessed:")
+empty_user_df.show()
+print("All the pages that can be accessed:")
+all_pages_df.show()
+
+print("-"*25)
+print("The pages the empty user did not access:")
+for row in set(all_pages_df.collect()) - set(empty_user_df.collect()):
+    print(row.page)
 
 
 # # Question 2 - Reflect
