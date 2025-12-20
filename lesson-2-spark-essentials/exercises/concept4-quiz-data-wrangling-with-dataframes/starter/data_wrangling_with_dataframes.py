@@ -56,7 +56,12 @@ print("The empty user seems to be a user who isn't logged in or doesn't have an 
 
 
 # TODO: write your code to answer question 3
+print("\n---------------------------------------------")
+print("Question 3")
+print("----------------------------------------------")
 
+female_df = df.select(["gender", "userId"]).where(df["gender"] == 'F').dropDuplicates()
+print(f"\nThere are {female_df.count()} female users.")
 
 # # Question 4
 # 
