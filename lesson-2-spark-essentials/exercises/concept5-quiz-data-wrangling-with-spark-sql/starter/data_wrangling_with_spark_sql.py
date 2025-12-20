@@ -103,3 +103,29 @@ spark.sql(most_played_query).show()
 
 # TODO: write your code to answer question 5
 
+print("\n---------------------------------------------")
+print("Question 5")
+print("----------------------------------------------")
+
+query = """
+    WITH cusum AS (
+        SELECT userID, page, ts,
+            CASE WHEN page = 'Home' THEN 1 ELSE 0 END AS homevisit,
+            SUM(CASE WHEN page = 'Home' THEN 1 ELSE 0 END) OVER (
+                PARTITION BY userID
+                ORDER BY ts DESC
+                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+            ) AS period
+        FROM user_log_table
+        WHERE page IN ('NextSong', 'Home') AND userID != ""
+    )
+    SELECT AVG(song_count) AS average_songs
+    FROM (
+        SELECT userID, period, COUNT(period) AS song_count
+        FROM cusum
+        WHERE page = 'NextSong'
+        GROUP BY userID, period
+    )
+"""
+
+spark.sql(query).show()
